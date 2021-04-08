@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:komecari_project/helper/custom_firebase_exception.dart';
 
 abstract class BaseAuth {
   Stream<User> get userStateChanges;
@@ -9,7 +10,7 @@ abstract class BaseAuth {
       {String email, String password, String userName, bool isSeller});
   Future<void> signOut();
   Future<void> passwordReset({String email});
-  Future<void> sendEmailValid(email);
+  Future<void> sendEmailValid();
 }
 
 class Auth implements BaseAuth {
@@ -21,8 +22,13 @@ class Auth implements BaseAuth {
   User get currentUser => _auth.currentUser;
 
   @override
-  Future<void> sendEmailValid(email) async {
-    _auth.sendSignInLinkToEmail(email: email);
+  Future<void> sendEmailValid() async {
+    if (_auth.currentUser != null) {
+      await _auth.currentUser.sendEmailVerification();
+    } else {
+      throw CustomException(
+          code: 'user is null', message: 'not fount current user');
+    }
   }
 
   @override

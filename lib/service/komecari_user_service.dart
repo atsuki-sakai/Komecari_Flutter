@@ -8,13 +8,13 @@ import 'package:komecari_project/service/path_generator.dart';
 import 'package:komecari_project/service/auth.dart';
 import 'package:komecari_project/service/firestore_service.dart';
 import 'package:komecari_project/service/storage_service.dart';
-
+import 'package:rxdart/rxdart.dart';
 
 class KomecariUserService {
   final auth = Auth();
   final _firestore = FirestoreService.instance;
 
-  final _komecariUserStremController = StreamController<KomecariUser>();
+  final _komecariUserStremController = BehaviorSubject<KomecariUser>();
   Stream<KomecariUser> get userStream => _komecariUserStremController.stream;
   StreamSink<KomecariUser> get _userState => _komecariUserStremController.sink;
 
@@ -26,11 +26,11 @@ class KomecariUserService {
   void dispose() {
     _komecariUserStremController.close();
   }
+
   Future<void> checkLoginStates() async {
     if (auth.currentUser != null) {
       final snapShot = await fetchUser(uid: auth.currentUser.uid);
-      _userState
-          .add(KomecariUser.fromMap(snapShot.toMap()));
+      _userState.add(KomecariUser.fromMap(snapShot.toMap()));
     }
   }
 
@@ -51,18 +51,20 @@ class KomecariUserService {
     final _user = await auth.createUserWithEmailAndPassword(
         email: email, password: password);
 
-    if(profileImageFile != null) {
+    if (profileImageFile != null) {
       final storageCollection = StoragePath.profile(userId: _user.uid);
-      await StorageService.instance.uploadFile(file: profileImageFile, path: storageCollection,size: 120);
-      imageUrl = await StorageService.instance.downloadImageLink(path: storageCollection);
+      await StorageService.instance.uploadFile(
+          file: profileImageFile, path: storageCollection, size: 120);
+      imageUrl = await StorageService.instance
+          .downloadImageLink(path: storageCollection);
     }
 
     final komecariUser = KomecariUser(
-        uid: _user.uid,
-        userName: userName,
-        email: email,
-        isSeller: isSeller,
-        profileImageUrl: imageUrl,
+      uid: _user.uid,
+      userName: userName,
+      email: email,
+      isSeller: isSeller,
+      profileImageUrl: imageUrl,
     );
     final userCollection = APIPath.user(userId: _user.uid);
     await _firestore.setData(path: userCollection, data: komecariUser.toMap());

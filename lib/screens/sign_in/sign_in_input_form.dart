@@ -1,13 +1,9 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:komecari_project/component/alert_dialog.dart';
 import 'package:komecari_project/component/custom_text/title_text.dart';
 import 'package:komecari_project/Helper/custom_firebase_exception.dart';
-import 'package:komecari_project/screens/sign_in/initial_registration_page.dart';
 import 'package:komecari_project/screens/sign_in/sign_in_bloc.dart';
 import 'package:komecari_project/screens/sign_in/sign_in_model.dart';
 import 'package:komecari_project/service/komecari_user_service.dart';
@@ -76,7 +72,6 @@ class _SignInInputFormState extends State<SignInInputForm> {
     } else {
       await signInBloc.showGallery();
     }
-    // showGallery();
   }
 
   Future<void> _toggleFormType() async {
@@ -96,7 +91,7 @@ class _SignInInputFormState extends State<SignInInputForm> {
       if (toSend) {
         signInBloc.resetPassword();
       }
-    } catch(e){
+    } catch (e) {
       errorHandler(exception: e);
     } finally {
       FocusScope.of(context).unfocus();
@@ -122,7 +117,8 @@ class _SignInInputFormState extends State<SignInInputForm> {
       await signInBloc.register();
       await showAlertDialog(context,
           title: '登録完了',
-          content: 'メールアドレス確認用のメールを登録されたメールアドレス宛に送信しました。認証してからログインしてください。',
+          content:
+              'メールアドレス確認用のメールを登録されたメールアドレス宛に送信しました。認証してからログインしてください。メールが届くまで１〜２分かかる場合があります。',
           defaultActionText: 'OK');
     } catch (e) {
       rethrow;
@@ -136,7 +132,7 @@ class _SignInInputFormState extends State<SignInInputForm> {
       } else {
         await _register(model);
       }
-    } catch(e){
+    } catch (e) {
       errorHandler(exception: e);
     } finally {
       FocusScope.of(context).unfocus();
@@ -160,7 +156,9 @@ class _SignInInputFormState extends State<SignInInputForm> {
         }
       } else {
         showAlertDialog(context,
-            title: exception.code, content: exception.message, defaultActionText: 'OK');
+            title: exception.code,
+            content: exception.message,
+            defaultActionText: 'OK');
       }
     } else {
       showAlertDialog(context,
@@ -294,7 +292,15 @@ class _SignInInputFormState extends State<SignInInputForm> {
   Widget changeFormTypeContents(SignInModel _model) {
     if (_model.formType == SignInFormType.register) {
       if (_model.profileImageFile == null) {
-        return _buildChoiceImage();
+        return Column(
+          children: [
+            _buildChoiceImage(),
+            SizedBox(
+              height: 12.0,
+            ),
+            _buildUserNameTextField(context, _model),
+          ],
+        );
       } else {
         return Column(
           children: [

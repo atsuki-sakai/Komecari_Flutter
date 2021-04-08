@@ -56,8 +56,10 @@ class SignInBloc {
   }
 
   Future<void> sendEmailVarification() async {
-    if (komecariService.auth.currentUser != null) {
-      await komecariService.auth.currentUser.sendEmailVerification();
+    try {
+      await komecariService.auth.sendEmailValid();
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -90,7 +92,8 @@ class SignInBloc {
           userName: _model.userName,
           profileImageFile: _model.profileImageFile,
           isSeller: _model.isSeller);
-      await sendEmailVarification;
+      await sendEmailVarification();
+      updateWith(profileImageFile: null);
       takeOverTheInputFromSignInPage();
     } catch (e) {
       rethrow;
