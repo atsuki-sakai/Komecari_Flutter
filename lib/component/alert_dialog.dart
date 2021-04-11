@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'custom_text/description_text.dart';
-import 'custom_text/title_text.dart';
 
 Future<bool> showAlertDialog(
   BuildContext context, {

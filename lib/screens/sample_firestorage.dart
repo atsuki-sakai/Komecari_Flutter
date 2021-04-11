@@ -1,7 +1,6 @@
 import 'dart:io';
-import 'package:image/image.dart';
 import 'package:flutter/material.dart';
-import 'package:komecari_project/component/alert_dialog.dart';
+
 import 'package:komecari_project/component/safe_scaffold.dart';
 import 'package:komecari_project/service/path_generator.dart';
 import 'package:komecari_project/service/storage_service.dart';
@@ -43,6 +42,6 @@ class _SampleStorageState extends State<SampleStorage> {
           }, child: Text('get image')),
         ],
       ),
-    );;
+    );
   }
 }

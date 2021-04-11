@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:komecari_project/component/custom_drawer.dart';
+import 'package:komecari_project/screens/custom_drawer/custom_drawer.dart';
 import 'package:komecari_project/component/custom_text/title_text.dart';
 import 'package:komecari_project/model/komecari_user.dart';
 import 'package:komecari_project/screens/base_page/base_page_bloc.dart';

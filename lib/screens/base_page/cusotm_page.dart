@@ -4,10 +4,17 @@ import 'package:komecari_project/screens/home_page/home_page.dart';
 import 'package:komecari_project/screens/rices_page/rice_page.dart';
 import 'package:komecari_project/screens/search_rice_page/search_rice.dart';
 
-class CustomPageView extends StatelessWidget {
+class CustomPageView extends StatefulWidget {
+  @override
+  _CustomPageViewState createState() => _CustomPageViewState();
+}
+
+class _CustomPageViewState extends State<CustomPageView> {
+
   final List<Widget> _pages = [HomePage(), RicePage(), SearchRicePage()];
   final _pageController = PageController();
   CustomPageBloc bloc = CustomPageBloc();
+ 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(

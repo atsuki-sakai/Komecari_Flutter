@@ -92,13 +92,17 @@ class _SignInInputFormState extends State<SignInInputForm> {
         signInBloc.resetPassword();
       }
     } catch (e) {
-      errorHandler(exception: e);
+      exceptionHandler(exception: e);
     } finally {
       FocusScope.of(context).unfocus();
     }
   }
 
-  Future<void> _login() async {
+  Future<void> _login(SignInModel model) async {
+    if (!model.inputCompleted) {
+      throw CustomException(
+          code: '入力エラー', message: '入力がされていない項目があります。再度確認してください。');
+    }
     try {
       await signInBloc.login();
       Navigator.pop(context);
@@ -108,7 +112,6 @@ class _SignInInputFormState extends State<SignInInputForm> {
   }
 
   Future<void> _register(SignInModel model) async {
-    // TODO - Please replace with the comment out code
     if (!model.inputCompleted) {
       throw CustomException(
           code: '入力エラー', message: '入力がされていない項目があります。再度確認してください。');
@@ -128,18 +131,18 @@ class _SignInInputFormState extends State<SignInInputForm> {
   Future<void> _submit(SignInModel model) async {
     try {
       if (model.formType == SignInFormType.signIn) {
-        await _login();
+        await _login(model);
       } else {
         await _register(model);
       }
     } catch (e) {
-      errorHandler(exception: e);
+      exceptionHandler(exception: e);
     } finally {
       FocusScope.of(context).unfocus();
     }
   }
 
-  Future<void> errorHandler({@required Exception exception}) async {
+  Future<void> exceptionHandler({@required Exception exception}) async {
     if (exception is FirebaseException) {
       final _e = CustomFirebaseException.transformJPLanguage(e: exception);
       showAlertDialog(context,
@@ -231,6 +234,12 @@ class _SignInInputFormState extends State<SignInInputForm> {
                   ),
                 ),
               ),
+              if(_model.showPasswordResetButton)...{
+                TextButton(
+                  child: Text('パスワードをお忘れですか？'),
+                  onPressed: resetPassword,
+                ),
+              }
             ],
           );
         });

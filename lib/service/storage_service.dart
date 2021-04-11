@@ -19,12 +19,13 @@ class StorageService {
     // ImagePickerで取得した画像の保存先のディレクトリを取得
     final tempDir = await getTemporaryDirectory();
     final tempPath = tempDir.path;
-    final byte = await file.readAsBytesSync();
+    // TODO - awaitが要らないと出るので消した
+    final byte =  file.readAsBytesSync();
     final IMG.Image image = IMG.decodeImage(byte);
     final IMG.Image thumbnail =
         IMG.copyResize(image, width: size, height: size);
     //IMG.Image型からFileを作成
-    return File('$tempPath/${fileName}.jpeg')
+    return File('$tempPath/$fileName.jpeg')
       ..writeAsBytesSync(IMG.encodeJpg(thumbnail, quality: quality));
   }
 

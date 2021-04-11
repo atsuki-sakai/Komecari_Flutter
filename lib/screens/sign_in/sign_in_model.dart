@@ -16,7 +16,6 @@ class SignInModel {
     this.formType = SignInFormType.signIn,
     this.isSubmitted = false,
     this.isLoading = false,
-    this.showPasswordResetButton = false,
   });
 
   String email;
@@ -27,7 +26,7 @@ class SignInModel {
   SignInFormType formType;
   bool isSubmitted = false;
   bool isLoading = false;
-  bool showPasswordResetButton = false;
+  bool get showPasswordResetButton => isSubmitted == true && email.isNotEmpty;
   bool get inputCompleted => email.isNotEmpty || password.isNotEmpty || userName.isNotEmpty;
 
 
@@ -64,7 +63,6 @@ class SignInModel {
       formType: formType ?? this.formType,
       isSubmitted: isSubmitted ?? this.isSubmitted,
       isLoading: isLoading ?? this.isLoading,
-      showPasswordResetButton: showPasswordResetButton ?? this.showPasswordResetButton,
     );
   }
 }
