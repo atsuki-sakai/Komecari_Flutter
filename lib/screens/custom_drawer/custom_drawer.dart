@@ -39,7 +39,6 @@ final sellerMenuItems = [
   DrawerMenuItem(title: '販売履歴', iconData: Icons.history_edu),
 ];
 
-
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key key, this.komecariUser, this.komecariService})
       : super(key: key);
@@ -55,8 +54,7 @@ class CustomDrawer extends StatelessWidget {
   }
 
   Widget _transitionMenuPage(DrawerMenuItem menuItem) {
-
-    switch(menuItem.title) {
+    switch (menuItem.title) {
       case 'プロフィール':
         return ProfilePage();
         break;
@@ -73,7 +71,7 @@ class CustomDrawer extends StatelessWidget {
         return SettingPage();
         break;
       case '出品する':
-        return AddRicePage();
+        return AddRicePage(user: komecariUser,);
         break;
       case '出品中の商品':
         return OnSaleRicesPage();
@@ -117,8 +115,9 @@ class CustomDrawer extends StatelessWidget {
                 if (komecariUser == null) ...{
                   ...notLoginMenu()
                 } else ...{
-                  ..._buildMenuItems(onTap: (menuItem) {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                  ..._buildMenuItems(onTap: (menuItem)  {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
                       return _transitionMenuPage(menuItem);
                     }));
                   })
@@ -146,23 +145,23 @@ class CustomDrawer extends StatelessWidget {
 
   TextButton _buildLoginAndLogoutButton(BuildContext context) {
     return TextButton(
-                onPressed: () async {
-                  if (komecariUser == null) {
-                    _loginAndHideDrawer(context);
-                  } else {
-                    _logoutAndHideDrawer(context);
-                  }
-                },
-                child: Text(
-                  komecariUser == null ? 'Log In' : 'Sign Out',
-                  style: GoogleFonts.montserrat(
-                      fontSize: 22.0,
-                      color: Colors.blue.shade500,
-                      fontWeight: FontWeight.w400),
-                ),
-              );
+      onPressed: () async {
+        if (komecariUser == null) {
+          _loginAndHideDrawer(context);
+        } else {
+          _logoutAndHideDrawer(context);
+        }
+      },
+      child: Text(
+        komecariUser == null ? 'Log In' : 'Sign Out',
+        style: GoogleFonts.montserrat(
+            fontSize: 22.0,
+            color: Colors.blue.shade500,
+            fontWeight: FontWeight.w400),
+      ),
+    );
   }
-  
+
   List<Widget> notLoginMenu() {
     return [
       Icon(
@@ -303,23 +302,23 @@ class CustomDrawer extends StatelessWidget {
   Container _buildNotLoginHeader() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 30.0,
-            ),
-            Text(
-              'ようこそ \nKomecariへ',
-              style: GoogleFonts.montserrat(
-                  fontSize: 28.0, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-          ],
-        ),
-      );
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 30.0,
+          ),
+          Text(
+            'ようこそ \nKomecariへ',
+            style: GoogleFonts.montserrat(
+                fontSize: 28.0, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildKomecariLogo() {

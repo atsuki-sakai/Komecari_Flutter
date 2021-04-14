@@ -29,17 +29,18 @@ class StorageService {
       ..writeAsBytesSync(IMG.encodeJpg(thumbnail, quality: quality));
   }
 
-  Future<dynamic> uploadFile({
+  Future<String> uploadFile({
     @required File file,
     @required String path,
     int quality = 85,
-    int size = 200,
+    int size = 120,
   }) async {
     final _ref = _storage.ref(path);
     // path = 'profiles/*userId*'
     var compressedImage = await _complessFile(
-        file: file, size: 100, fileName: path.split('/').last);
-    await _ref.putFile(compressedImage);
+        file: file, size: size, quality: quality, fileName: path.split('/').last);
+    final task = await _ref.putFile(compressedImage);
+    return Future.value(task.ref.getDownloadURL());
   }
 
   Future<String> downloadImageLink({

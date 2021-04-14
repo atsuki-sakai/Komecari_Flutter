@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:komecari_project/helper/transparent_app_bar.dart';
 import 'package:komecari_project/screens/custom_drawer/custom_drawer.dart';
 import 'package:komecari_project/component/custom_text/title_text.dart';
 import 'package:komecari_project/model/komecari_user.dart';
@@ -12,6 +13,7 @@ class BasePage extends StatefulWidget {
   BasePage({Key key, @required this.komecariService}) : super(key: key);
   final KomecariUserService komecariService;
   final List<Widget> _pages = [HomePage(), RicePage(), SearchRicePage()];
+
   @override
   _BasePageState createState() => _BasePageState();
 }
@@ -38,10 +40,12 @@ class _BasePageState extends State<BasePage> {
       builder: (context, snapshot) {
         final currentIndex = snapshot.data ?? 0;
         return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.grey.shade50,
-            shadowColor: Colors.transparent,
-            title: _buildAppBarContent(),
+          appBar: PreferredSize(
+            preferredSize: Size(double.infinity, 60),
+            child: buildTransparentAppBar(
+              showIcon: true,
+              title: 'KOMECARI',
+            ),
           ),
           drawer: StreamBuilder<KomecariUser>(
               stream: widget.komecariService.userStream,
@@ -77,28 +81,6 @@ class _BasePageState extends State<BasePage> {
           ),
         );
       },
-    );
-  }
-
-  Row _buildAppBarContent() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.rice_bowl_outlined),
-        SizedBox(
-          width: 12.0,
-        ),
-        TitleText(
-          text: 'KOMECARI',
-        ),
-        SizedBox(
-          width: 12.0,
-        ),
-        Opacity(
-          opacity: 0.0,
-          child: Icon(Icons.ac_unit),
-        ),
-      ],
     );
   }
 }

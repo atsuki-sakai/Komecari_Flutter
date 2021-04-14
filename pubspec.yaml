@@ -36,6 +36,9 @@ dependencies:
   provider: ^5.0.0
   rxdart: ^0.26.0
   uuid: ^2.2.2
+  keyboard_actions: ^3.4.0
+  multi_image_picker: ^4.8.0
+  image_editor: ^1.0.0
 
 flutter_native_splash:
   color: "#ffffff"

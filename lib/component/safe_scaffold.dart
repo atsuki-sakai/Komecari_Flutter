@@ -7,6 +7,7 @@ class SafeScaffold extends StatelessWidget {
     this.floatingActionButton,
     this.body,
     this.padding,
+    this.bottomNavigationBar,
     this.backGroundColor = Colors.white,
   });
 
@@ -14,6 +15,7 @@ class SafeScaffold extends StatelessWidget {
   final Widget appBar;
   final Widget drawer;
   final FloatingActionButton floatingActionButton;
+  final BottomNavigationBar bottomNavigationBar;
   final Color backGroundColor;
   final EdgeInsets padding;
 
@@ -23,6 +25,7 @@ class SafeScaffold extends StatelessWidget {
       appBar: appBar,
       drawer: drawer,
       floatingActionButton: floatingActionButton,
+      bottomNavigationBar: bottomNavigationBar,
       body: SafeArea(
         child: Container(
           alignment: Alignment.center,
