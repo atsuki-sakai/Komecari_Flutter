@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komecari_project/component/custom_text/description_text.dart';
+import 'package:komecari_project/model/drawer_menu_item.dart';
 import 'package:komecari_project/model/komecari_user.dart';
 import 'package:komecari_project/screens/add_rice_page/add_rice_page.dart';
 import 'package:komecari_project/screens/cart_page/cart.dart';
@@ -53,7 +54,7 @@ class CustomDrawer extends StatelessWidget {
     }));
   }
 
-  Widget _transitionMenuPage(DrawerMenuItem menuItem) {
+  Widget _presentPage(DrawerMenuItem menuItem) {
     switch (menuItem.title) {
       case 'プロフィール':
         return ProfilePage();
@@ -103,11 +104,11 @@ class CustomDrawer extends StatelessWidget {
                   height: 12,
                 ),
                 Text(
-                  'Menu',
+                  komecariUser != null ? 'Menu': '',
                   style: GoogleFonts.montserrat(
-                      fontSize: 20.0,
+                      fontSize:  komecariUser != null ? 20.0: 16.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87),
+                      color:  komecariUser != null ? Colors.black87: Colors.blue.shade500),
                 ),
                 SizedBox(
                   height: 12.0,
@@ -118,7 +119,7 @@ class CustomDrawer extends StatelessWidget {
                   ..._buildMenuItems(onTap: (menuItem)  {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
-                      return _transitionMenuPage(menuItem);
+                      return _presentPage(menuItem);
                     }));
                   })
                 },
@@ -153,7 +154,7 @@ class CustomDrawer extends StatelessWidget {
         }
       },
       child: Text(
-        komecariUser == null ? 'Log In' : 'Sign Out',
+        komecariUser == null ? 'LogIn & Register' : 'Sign Out',
         style: GoogleFonts.montserrat(
             fontSize: 22.0,
             color: Colors.blue.shade500,
@@ -340,10 +341,3 @@ class CustomDrawer extends StatelessWidget {
   }
 }
 
-class DrawerMenuItem {
-  DrawerMenuItem({this.index, this.title, this.iconData});
-
-  final int index;
-  final String title;
-  final IconData iconData;
-}

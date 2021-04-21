@@ -7,17 +7,19 @@ class DescriptionText extends StatelessWidget {
     @required this.text,
     this.fontSize = 18.0,
     this.color,
+    this.maxLine = 2,
     this.overflow = TextOverflow.ellipsis,
   }) : super(key: key);
   final String text;
   final double fontSize;
   final color;
+  final int maxLine;
   final TextOverflow overflow;
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      maxLines: 2,
+      maxLines: maxLine,
       overflow: overflow,
       style: GoogleFonts.montserrat(
           fontSize: fontSize,

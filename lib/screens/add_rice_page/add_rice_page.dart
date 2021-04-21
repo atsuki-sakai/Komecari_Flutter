@@ -66,23 +66,11 @@ class _AddRicePageState extends State<AddRicePage> {
   final FocusNode _detailAddressFocusNode = FocusNode();
 
   List<Asset> images = [];
-
   String get description => _descriptionController.text;
-
   int get kg => int.parse(_kgController.text);
-
   double get price => double.parse(_priceController.text);
-
-  // TODO - 商品生産地　都道府県
-  String produceArea = '';
-
-  // TODO - 商品発送地域 **AreaクラスのIDを登録
-  String get detailShippingArea => '';
-
   int get inStock => int.parse(_inStockController.text);
 
-  // TODO - Storageに保存したURLを保存する
-  List<String> get riceImages => [];
 
   KomecariUser get user => widget.user;
 
@@ -110,6 +98,7 @@ class _AddRicePageState extends State<AddRicePage> {
   }
 
   void _registerRice() async {
+
     final Rice newRice = Rice(
       uid: Uuid().v4(),
       sellerId: user.uid,
