@@ -10,11 +10,11 @@ import 'package:komecari_project/service/komecari_user_service.dart';
 import 'package:provider/provider.dart';
 
 class SignInInputForm extends StatefulWidget {
-  SignInInputForm({Key key, @required this.signInBloc}) : super(key: key);
+  SignInInputForm({Key? key, required this.signInBloc}) : super(key: key);
 
   final SignInBloc signInBloc;
 
-  static Widget create(
+  static Widget launchProvider(
       BuildContext context, KomecariUserService komecariService) {
     return Provider(
       create: (_) => SignInBloc(komecariService: komecariService),
@@ -23,7 +23,10 @@ class SignInInputForm extends StatefulWidget {
           return SignInInputForm(signInBloc: bloc);
         },
       ),
-      dispose: (_, bloc) => bloc.dispose(),
+      dispose: (_, bloc) {
+        final _bloc = bloc as SignInBloc;
+        _bloc.dispose();
+      },
     );
   }
 
@@ -67,7 +70,7 @@ class _SignInInputFormState extends State<SignInInputForm> {
       defaultActionText: 'カメラを起動',
       cancelActionText: 'アルバムを開く',
     );
-    if (selectType) {
+    if (selectType!) {
       await signInBloc.showCamera();
     } else {
       await signInBloc.showGallery();
@@ -88,11 +91,11 @@ class _SignInInputFormState extends State<SignInInputForm> {
           content: '入力されたアドレス宛に再設定用のメールをお送信しますパスワードを再設定しますか？。',
           defaultActionText: '送信',
           cancelActionText: '送信しない');
-      if (toSend) {
+      if (toSend!) {
         signInBloc.resetPassword();
       }
     } catch (e) {
-      exceptionHandler(exception: e);
+      exceptionHandler(exception: e as Exception);
     } finally {
       FocusScope.of(context).unfocus();
     }
@@ -125,7 +128,7 @@ class _SignInInputFormState extends State<SignInInputForm> {
           defaultActionText: 'OK');
     } catch (e) {
       rethrow;
-    } finally {}
+    }
   }
 
   Future<void> _submit(SignInModel model) async {
@@ -136,13 +139,13 @@ class _SignInInputFormState extends State<SignInInputForm> {
         await _register(model);
       }
     } catch (e) {
-      exceptionHandler(exception: e);
+      exceptionHandler(exception: e as Exception);
     } finally {
       FocusScope.of(context).unfocus();
     }
   }
 
-  Future<void> exceptionHandler({@required Exception exception}) async {
+  Future<void> exceptionHandler({required Exception exception}) async {
     if (exception is FirebaseException) {
       final _e = CustomFirebaseException.transformJPLanguage(e: exception);
       showAlertDialog(context,
@@ -154,7 +157,7 @@ class _SignInInputFormState extends State<SignInInputForm> {
             content: exception.message,
             defaultActionText: '再送する',
             cancelActionText: 'OK');
-        if (toSend) {
+        if (toSend!) {
           signInBloc.sendEmailVarification();
         }
       } else {
@@ -175,9 +178,10 @@ class _SignInInputFormState extends State<SignInInputForm> {
   Widget build(BuildContext context) {
     return StreamBuilder<SignInModel>(
         initialData: SignInModel(),
-        stream: widget.signInBloc.modelStream,
+        stream: signInBloc.modelStream,
         builder: (context, snapShot) {
-          final _model = snapShot.data;
+          if(snapShot.data == null) return Center(child: CircularProgressIndicator(),);
+          final _model = snapShot.data!;
           return Column(
             children: [
               TitleText(
@@ -196,7 +200,7 @@ class _SignInInputFormState extends State<SignInInputForm> {
                 height: 8.0,
               ),
               _buildPasswordTextField(context, _model),
-              if (_model.formType == SignInFormType.register) ...{
+              if (_model.formType == SignInFormType.signUp) ...{
                 SizedBox(
                   height: 8.0,
                 ),
@@ -234,7 +238,7 @@ class _SignInInputFormState extends State<SignInInputForm> {
                   ),
                 ),
               ),
-              if(_model.showPasswordResetButton)...{
+              if (_model.showPasswordResetButton && _model.formType == SignInFormType.signIn) ...{
                 TextButton(
                   child: Text('パスワードをお忘れですか？'),
                   onPressed: resetPassword,
@@ -242,7 +246,8 @@ class _SignInInputFormState extends State<SignInInputForm> {
               }
             ],
           );
-        });
+        },
+    );
   }
 
   InkWell _buildSelectedImage(SignInModel _model) {
@@ -257,7 +262,7 @@ class _SignInInputFormState extends State<SignInInputForm> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(60.0),
           child: Image.file(
-            _model.profileImageFile,
+            _model.profileImageFile!,
             fit: BoxFit.fill,
           ),
         ),
@@ -299,7 +304,7 @@ class _SignInInputFormState extends State<SignInInputForm> {
   }
 
   Widget changeFormTypeContents(SignInModel _model) {
-    if (_model.formType == SignInFormType.register) {
+    if (_model.formType == SignInFormType.signUp) {
       if (_model.profileImageFile == null) {
         return Column(
           children: [
@@ -326,7 +331,7 @@ class _SignInInputFormState extends State<SignInInputForm> {
     }
   }
 
-  Row _buildSelectAccountTypeSwitch({SignInModel model}) {
+  Row _buildSelectAccountTypeSwitch({required SignInModel model}) {
     return Row(
       children: [
         Icon(
@@ -345,11 +350,7 @@ class _SignInInputFormState extends State<SignInInputForm> {
         Spacer(),
         Switch(
           value: model.isSeller,
-          onChanged: (value) {
-            setState(() {
-              model.isSeller = value;
-            });
-          },
+          onChanged: signInBloc.changeSeller,
         ),
       ],
     );
@@ -361,15 +362,15 @@ class _SignInInputFormState extends State<SignInInputForm> {
       controller: emailController,
       focusNode: emailFocusNode,
       autocorrect: false,
-      onChanged: (email) => signInBloc.updateEmail(email: email),
-      onEditingComplete: () {
-        FocusScope.of(context).requestFocus(passwordFocusNode);
-      },
+      onChanged: signInBloc.updateEmail,
+      onEditingComplete: () =>
+          FocusScope.of(context).requestFocus(passwordFocusNode),
       decoration: InputDecoration(
         border: InputBorder.none,
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(color: Colors.blue.shade500)),
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide(color: Colors.blue.shade500),
+        ),
         hintText: 'sample@email.com',
         labelText: 'Email',
         errorText: model.isSubmitted == true && model.email.isEmpty
@@ -385,15 +386,14 @@ class _SignInInputFormState extends State<SignInInputForm> {
       controller: passwordController,
       focusNode: passwordFocusNode,
       obscureText: true,
-      onChanged: (password) => signInBloc.updatePassword(password: password),
-      onEditingComplete: () {
-        FocusScope.of(context).unfocus();
-      },
+      onChanged: signInBloc.updatePassword,
+      onEditingComplete: () => FocusScope.of(context).unfocus(),
       decoration: InputDecoration(
         border: InputBorder.none,
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(color: Colors.blue.shade500)),
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide(color: Colors.blue.shade500),
+        ),
         hintText: 'password',
         labelText: 'Password',
         errorText: model.isSubmitted == true && model.password.isEmpty
@@ -408,17 +408,17 @@ class _SignInInputFormState extends State<SignInInputForm> {
       keyboardType: TextInputType.text,
       controller: userNameController,
       focusNode: userNameFocusNode,
-      onChanged: (userName) => signInBloc.updateUserName(userName: userName),
-      onEditingComplete: () {
-        FocusScope.of(context).requestFocus(emailFocusNode);
-      },
+      onChanged: signInBloc.updateUserName,
+      onEditingComplete: () =>
+          FocusScope.of(context).requestFocus(emailFocusNode),
       decoration: InputDecoration(
         border: InputBorder.none,
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(color: Colors.blue.shade500)),
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide(color: Colors.blue.shade500),
+        ),
         hintText: 'Yamada Tarou',
-        labelText: 'User Name',
+        labelText: 'Username',
         errorText: model.isSubmitted == true && model.userName.isEmpty
             ? 'ユーザー名が入力されていません。'
             : null,

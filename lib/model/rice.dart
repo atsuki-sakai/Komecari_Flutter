@@ -1,18 +1,22 @@
 
+import 'package:flutter/material.dart';
+import 'package:image/image.dart';
+import 'package:komecari_project/screens/add_area_page/add_area_model.dart';
+import 'package:komecari_project/screens/add_rice_page/add_rice_model.dart';
 import 'package:uuid/uuid.dart';
 
 class Rice {
-  String _uid;
-  String _sellerId;
-  String _riceName;
-  String _description;
-  int _kg;
-  double _price;
-  List<String> _itemImages;
-  String _produceArea;
-  String _detailShippingArea;
-  int _inStock;
-  List<String> _comments;
+  String _uid = '';
+  String _sellerId = '';
+  String _riceName = '';
+  String _description = '';
+  int _kg = 0;
+  double _price = 0;
+  List<String> _itemImages = [];
+  String _produceArea = '';
+  String _detailShippingArea = '';
+  int _inStock = 0;
+  List<String> _comments = [];
 
   String get uid => this._uid;
 
@@ -37,18 +41,34 @@ class Rice {
   List<String> get comments => this._comments;
 
   bool get onSale => _inStock > 0 ? true : false;
+  
+  Rice.registerWithModel({required String sellerId ,required AddRiceModel riceModel, required AddAreaModel areaModel, required List<String> imageUrls}){
+    this._uid = Uuid().v4();
+    this._sellerId = sellerId;
+    this._riceName = riceModel.riceName;
+    this._description = riceModel.description;
+    this._kg = riceModel.kg;
+    this._price = riceModel.price;
+    this._itemImages = imageUrls;
+    this._produceArea = areaModel.prefecture;
+    this._detailShippingArea = '${areaModel.prefecture}${areaModel.cities}${areaModel.address}${areaModel.detailAddress}';
+    this._inStock = riceModel.inStock;
+    // TODO - make commets class
+    this._comments = [];
+  }
 
   Rice({
-    String uid,
-    String sellerId,
-    String description,
-    int kg,
-    double price,
-    String produceArea,
-    String detailShippingArea,
-    int inStock,
-    List<String> itemImages,
-    List<String> comments,
+    String? uid,
+    String? riceName,
+    String? sellerId,
+    String? description,
+    int? kg,
+    double? price,
+    String? produceArea,
+    String? detailShippingArea,
+    int? inStock,
+    List<String>? itemImages,
+    List<String>? comments,
   }) {
     _uid = uid ?? Uuid().v4();
     _sellerId = sellerId ?? '';
@@ -81,6 +101,7 @@ class Rice {
   factory Rice.fromMap(Map<String, dynamic> data) {
     return Rice(
       uid: data['uid'],
+      riceName: data['riceName'],
       sellerId: data['sellerId'],
       description: data['description'],
       kg: data['kg'],
@@ -95,6 +116,7 @@ class Rice {
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
+      'riceName': riceName,
       'sellerId': sellerId,
       'description': description,
       'kg': kg,
@@ -107,16 +129,18 @@ class Rice {
   }
 
   void updateWith({
-    String sellerId,
-    String description,
-    int kg,
-    double price,
-    String produceArea,
-    String detailShippingArea,
-    int inStock,
-    List<String> itemImages,
-    List<String> comments,
+    String? riceName,
+    String? sellerId,
+    String? description,
+    int? kg,
+    double? price,
+    String? produceArea,
+    String? detailShippingArea,
+    int? inStock,
+    List<String>? itemImages,
+    List<String>? comments,
   }) {
+    this._riceName = riceName ?? this.riceName;
     this._sellerId = sellerId ?? this.sellerId;
     this._description = description ?? this.description;
     this._kg = kg ?? this.kg;

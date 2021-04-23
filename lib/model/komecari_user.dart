@@ -1,28 +1,27 @@
 
-import 'package:komecari_project/model/area.dart';
 
-class KomecariUser {
-  String _uid;
-  String _profileImageUrl;
-  String _userName;
+class KomecariUser{
+  String _uid = '';
+  String? _profileImageUrl;
+  String _userName = '';
   bool _isSeller = false;
-  String _email;
+  String _email = '';
   bool _hasShippingArea = false;
 
   String get uid => this._uid;
   String get userName => this._userName;
   bool get hasShippingArea => this._hasShippingArea;
-  String get prifileImageUrl => this._profileImageUrl;
+  String? get prifileImageUrl => this._profileImageUrl;
   bool get isSeller => this._isSeller;
   String get email => this._email;
 
   KomecariUser({
-    String uid,
-    String userName,
-    bool isSeller,
-    String email,
-    String profileImageUrl,
-    bool hasShippingArea,
+    String? uid,
+    String? userName,
+    bool? isSeller,
+    String? email,
+    String? profileImageUrl,
+    bool? hasShippingArea,
   }) {
     _uid = uid ?? '';
     _userName = userName ?? '';
@@ -54,10 +53,10 @@ class KomecariUser {
     );
   }
   void updateWith({
-    bool isSeller,
-    String email,
-    String profileImageUrl,
-    bool hasShippingArea,
+    bool? isSeller,
+    String? email,
+    String? profileImageUrl,
+    bool? hasShippingArea,
   }) {
     _isSeller = isSeller ?? this.isSeller;
     _email = email ?? this.email;

@@ -6,22 +6,33 @@ class FirestoreService {
   static final instance = FirestoreService._();
 
   Future<void> setData({
-    @required String path,
-    @required Map<String, dynamic> data,
+    required String path,
+    required Map<String, dynamic> data,
   }) async {
-    final reference = FirebaseFirestore.instance.doc(path);
-    await reference.set(data);
+    try {
+      final reference = FirebaseFirestore.instance.doc(path);
+      await reference.set(data);
+    }catch(e){
+      rethrow;
+    }
   }
 
-  Future<DocumentSnapshot> getData({@required String path}) async {
-    final reference = FirebaseFirestore.instance.doc(path);
-    final snapShot = await reference.get();
-    print(snapShot);
-    return snapShot;
+  Future<DocumentSnapshot> getData({required String path}) async {
+    try {
+      final reference = FirebaseFirestore.instance.doc(path);
+      final snapShot = await reference.get();
+      return snapShot;
+    }catch(e){
+      rethrow;
+    }
   }
 
-  Future<void> deleteData({@required String path}) async {
-    final reference = FirebaseFirestore.instance.doc(path);
-    await reference.delete();
+  Future<void> deleteData({required String path}) async {
+    try {
+      final reference = FirebaseFirestore.instance.doc(path);
+      await reference.delete();
+    }catch(e){
+      rethrow;
+    }
   }
 }

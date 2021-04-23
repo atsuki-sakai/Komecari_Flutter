@@ -6,18 +6,20 @@ class SafeScaffold extends StatelessWidget {
     this.drawer,
     this.floatingActionButton,
     this.body,
-    this.padding,
+    this.padding = const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
     this.bottomNavigationBar,
     this.backGroundColor = Colors.white,
+    this.alignment = Alignment.center,
   });
 
-  final Widget body;
-  final Widget appBar;
-  final Widget drawer;
-  final FloatingActionButton floatingActionButton;
-  final BottomNavigationBar bottomNavigationBar;
+  final Widget? body;
+  final PreferredSizeWidget? appBar;
+  final Widget? drawer;
+  final FloatingActionButton? floatingActionButton;
+  final BottomNavigationBar? bottomNavigationBar;
   final Color backGroundColor;
   final EdgeInsets padding;
+  final Alignment alignment;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,9 +30,8 @@ class SafeScaffold extends StatelessWidget {
       bottomNavigationBar: bottomNavigationBar,
       body: SafeArea(
         child: Container(
-          alignment: Alignment.center,
-          padding: padding ??
-              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
+          alignment: alignment,
+          padding: padding,
           child: body,
         ),
       ),

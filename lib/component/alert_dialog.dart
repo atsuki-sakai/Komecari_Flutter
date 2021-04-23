@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Future<bool> showAlertDialog(
+Future<bool?> showAlertDialog(
   BuildContext context, {
-  @required String title,
-  @required String content,
-  @required String defaultActionText,
-  String cancelActionText,
+  required String title,
+  required String content,
+  required String defaultActionText,
+  String? cancelActionText,
 }) {
   if (!Platform.isIOS) {
     return showDialog(

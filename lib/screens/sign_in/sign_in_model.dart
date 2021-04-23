@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 enum SignInFormType {
   signIn,
-  register,
+  signUp,
 }
 
 class SignInModel {
@@ -21,7 +21,7 @@ class SignInModel {
   String email;
   String password;
   String userName;
-  File profileImageFile;
+  File? profileImageFile;
   bool isSeller = false;
   SignInFormType formType;
   bool isSubmitted = false;
@@ -31,28 +31,28 @@ class SignInModel {
 
 
   String get primaryText =>
-      formType == SignInFormType.signIn ? 'Sign In' : 'Sign Up';
+      formType == SignInFormType.signIn ? 'Sign In' :  'Sign Up';
 
   String get secondaryText => formType == SignInFormType.signIn
       ? 'アカウントをお持ちでないですか？'
       : 'すでにアカウントをお持ちですか?';
 
   String get buttonText =>
-      formType == SignInFormType.signIn ? 'Login' : 'Register';
+      formType == SignInFormType.signIn ? 'Sign In' : 'Sign Up';
 
   IconData get buttonIcon =>
       formType == SignInFormType.signIn ? Icons.login : Icons.create;
 
   SignInModel copyWith({
-    String email,
-    String password,
-    String userName,
-    File profileImageFile,
-    bool isSeller,
-    SignInFormType formType,
-    bool isSubmitted,
-    bool isLoading,
-    bool showPasswordResetButton,
+    String? email,
+    String? password,
+    String? userName,
+    File? profileImageFile,
+    bool? isSeller,
+    SignInFormType? formType,
+    bool? isSubmitted,
+    bool? isLoading,
+    bool? showPasswordResetButton,
   }) {
     return SignInModel(
       email: email ?? this.email,

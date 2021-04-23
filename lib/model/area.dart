@@ -69,7 +69,7 @@ class Area {
 
   factory Area.fromMap(Map<String, dynamic> data) {
     return Area(
-      userId: data['uid'],
+      userId: data['userId'],
       prefecture: data['prefecture'],
       cities: data['cities'],
       address: data['address'],

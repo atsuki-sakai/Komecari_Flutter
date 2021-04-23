@@ -7,7 +7,7 @@ import 'package:komecari_project/screens/sign_in/sign_in_model.dart';
 import 'package:komecari_project/service/komecari_user_service.dart';
 
 class SignInBloc {
-  SignInBloc({@required this.komecariService});
+  SignInBloc({required this.komecariService});
 
   final KomecariUserService komecariService;
   final picker = ImagePicker();
@@ -38,7 +38,7 @@ class SignInBloc {
 
   void toggleFormType() {
     final _formType = _model.formType == SignInFormType.signIn
-        ? SignInFormType.register
+        ? SignInFormType.signUp
         : SignInFormType.signIn;
     updateWith(
       email: '',
@@ -102,12 +102,12 @@ class SignInBloc {
     }
   }
 
-  void updateEmail({@required String email}) => updateWith(email: email);
+  void updateEmail(String email) => updateWith(email: email);
 
-  void updatePassword({@required String password}) =>
+  void updatePassword(String password) =>
       updateWith(password: password);
 
-  void updateUserName({@required String userName}) =>
+  void updateUserName(String userName) =>
       updateWith(userName: userName);
 
   void updateProfile(File profileImageFile) => updateWith(
@@ -128,16 +128,21 @@ class SignInBloc {
     );
   }
 
+  void changeSeller(bool value) {
+    updateWith(isSeller: value);
+  }
+
+
   void updateWith({
-    String email,
-    String password,
-    String userName,
-    File profileImageFile,
-    bool isSeller,
-    SignInFormType formType,
-    bool isSubmitted,
-    bool isLoading,
-    bool showPasswordResetButton,
+    String? email,
+    String? password,
+    String? userName,
+    File? profileImageFile,
+    bool? isSeller,
+    SignInFormType? formType,
+    bool? isSubmitted,
+    bool? isLoading,
+    bool? showPasswordResetButton,
   }) {
     _model = _model.copyWith(
       email: email,

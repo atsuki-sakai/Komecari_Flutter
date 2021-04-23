@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 class SellerInfomation {
   SellerInfomation({
-    @required String sellerId,
-    @required String shopName,
-    List<String> onSaleingRices,
+    required String sellerId,
+    required String shopName,
+    List<String>? onSaleingRices,
   }) {
     _sellerId = sellerId;
     _shopName = shopName;
     _onSelleringRices = onSaleingRices ?? [];
   }
 
-  String _sellerId;
-  String _shopName;
+  String _sellerId = '';
+  String _shopName = '';
   List<String> _onSelleringRices = [];
 
   String get sellerId => _sellerId;
@@ -35,7 +35,7 @@ class SellerInfomation {
     };
   }
 
-  void productRegistration({@required String riceID}) {
+  void productRegistration({required String riceID}) {
     _onSelleringRices.insert(0, riceID);
   }
 }

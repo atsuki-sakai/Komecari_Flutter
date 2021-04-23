@@ -9,14 +9,8 @@ import 'package:komecari_project/service/komecari_user_service.dart';
 import 'package:provider/provider.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({@required this.komecariService});
-
+  const SignInPage({required this.komecariService});
   final KomecariUserService komecariService;
-
-  static Widget create(BuildContext context) {
-    return Provider(create: (_) => SignInBloc());
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeScaffold(
@@ -24,7 +18,7 @@ class SignInPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Container(
           width: MediaQuery.of(context).size.width * 0.8,
-          child: SignInInputForm.create(context, komecariService),
+          child: SignInInputForm.launchProvider(context, komecariService),
         ),
       ),
     );

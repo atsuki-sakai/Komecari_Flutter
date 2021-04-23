@@ -3,14 +3,15 @@ import 'custom_text/title_text.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   const CustomAppBar(
-      {Key key,
+      {Key? key,
       this.shwoDefaultBackbutton = true,
       this.showMenuButton = false,
-      this.actions})
+      this.actions,
+      })
       : super(key: key);
   final bool shwoDefaultBackbutton;
   final bool showMenuButton;
-  final List<Widget> actions;
+  final List<Widget>? actions;
 
   @override
   Size get preferredSize => Size(double.infinity, 40);
@@ -37,7 +38,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               icon: Icon(Icons.menu))
         },
         if (actions != null) ...{
-          ...actions,
+          ...actions!,
         },
       ],
     );

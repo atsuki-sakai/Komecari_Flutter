@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class TitleText extends StatelessWidget {
   const TitleText({
-    Key key,
-    @required this.text,
+    Key? key,
+    required this.text,
     this.fontSize = 24.0,
     this.color = Colors.black87,
     this.textOverflow = TextOverflow.ellipsis,
@@ -14,13 +14,13 @@ class TitleText extends StatelessWidget {
   final double fontSize;
   final Color color;
   final TextOverflow textOverflow;
-  final int maxLine;
+  final int? maxLine;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      maxLines: maxLine,
+      maxLines: maxLine ?? 1,
       overflow: textOverflow,
       style: GoogleFonts.montserrat(
         fontSize: fontSize,

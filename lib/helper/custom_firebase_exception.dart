@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class CustomException implements Exception {
-  const CustomException({this.code, this.message});
+  const CustomException({required this.code, required this.message});
 
   final String code;
 
@@ -14,7 +14,7 @@ class CustomFirebaseException {
   String message = '';
 
   static CustomFirebaseException transformJPLanguage(
-      {@required FirebaseException e}) {
+      {required FirebaseException e}) {
     switch (e.code) {
       case 'wrong-password':
         final exception = CustomFirebaseException();
@@ -55,7 +55,7 @@ class CustomFirebaseException {
       default:
         final exception = CustomFirebaseException();
         exception.code = e.code;
-        exception.message = e.message;
+        exception.message = e.message ?? 'No Message';
         return exception;
         break;
     }
